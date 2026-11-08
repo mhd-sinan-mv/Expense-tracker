@@ -97,3 +97,57 @@ def display_transactions():
         )
 
     print("=" * 75)
+
+def update_transaction(transaction_id: int,amount:int,category:str,transaction_type: str,date: str,description: str):
+    connection = sqlite3.connect(DB_PATH)
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            UPDATE transactions SET amount = ?, category = ?, transaction_type = ?, date = ?, description = ? WHERE id = ?""",(amount,category,transaction_type,date,description,transaction_id))
+        connection.commit()
+        return cursor.rowcount  # Return the number of rows updated
+    finally:
+        connection.close()
+
+def get_transaction_by_id(transaction_id):
+        connection = sqlite3.connect(DB_PATH)
+
+        try:
+            cursor = connection.cursor()
+            cursor.execute("""
+                SELECT id, amount, category, transaction_type,
+                    date, description
+                FROM transactions
+                WHERE id = ?
+            """, (transaction_id,))
+
+            row = cursor.fetchone()
+
+            if row is None:
+                return None
+
+            return Transaction(
+                transaction_id=row[0],
+                amount=row[1],
+                category=row[2],
+                transaction_type=row[3],
+                date=row[4],
+                description=row[5] or ""
+            )
+
+        finally:
+            connection.close()
+
+
+
+def delete_transaction(transaction_id: int):
+    connection = sqlite3.connect(DB_PATH)
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM transactions WHERE id = ?", (transaction_id,))
+        connection.commit()
+        return cursor.rowcount  
+    finally:
+        connection.close()
