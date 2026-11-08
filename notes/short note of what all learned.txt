@@ -1,0 +1,21 @@
+What each folders are : -
+    database: Database connection and SQL operations.
+    models: Classes representing our data.
+    services: Actual application functionality.
+    utils: Reusable helper functions.
+    main.py: The starting point of our application.
+
+The __init__.py files make these directories Python packages, so we can import their modules cleanly.
+
+__str__() and __repr__() are special methods called dunder methods.
+__str__() provides a human-readable representation.
+__repr__() is generally intended to provide a more developer-oriented representation, useful for debugging.
+
+DB_PATH = BASE_DIR / "expense_tracker.db" This creates the correct database path regardless of where you run the application from.
+
+BASE_DIR = Path(__file__).resolve().parent.parent 
+    __file__: Location of the current Python file (db.py).
+    .resolve(): Gets its absolute path.
+    .parent: Goes to the database folder's parent.
+    .parent.parent: Goes to the project root.
+
